@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">大同大學校園資訊系統</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="submit">登入</string>
+    <string name="remembermyaccount">記住我的帳號密碼</string>
+    <string name="EnterAccount">帳號</string>
+    <string name="EnterPassWord">密碼</string>
+    <string name="question">意見反饋</string>
+    <string name="about">關於</string>
+    <string name="about_title">關於</string>
+    <string name="about_content">Code by JackWu\nblog:Jack玩樂誌 </string>
+    <string name="logout">使用完畢按此登出</string>
+
+</resources>
