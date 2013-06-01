@@ -20,6 +20,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -477,27 +478,44 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				// TODO Auto-generated method stub
+				Log.v("aa", ""+which);
 				switch (which) {
 				case -1:
 					logout();
+					
+					finish();
+				break;
+				case -2:
+					logout();
+					finish();
+					Intent intent = new Intent(Intent.ACTION_VIEW);
+					intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=tw.jackwu.ttu.cis"));
+					startActivity(intent);
+					
+				break;
+				case -3:
+					logout();
+					finish();
+					intent = new Intent(MainActivity.this,Login.class);
+					startActivity(intent);
+					
 					break;
 				}
 			}
 		};
 		
 		new AlertDialog.Builder(this)
-		.setTitle("離開?")
-		.setMessage("你確定要登出嗎?")
-		.setPositiveButton("確定", okClick)
-		.setNegativeButton("取消", okClick)
+		.setTitle("使用完畢了嗎?")
+		.setMessage("您可以給此軟體評分或直接離開，期待您下次蒞臨 :D")
+		.setPositiveButton("離開程式", okClick)//-1
+		.setNegativeButton("評分", okClick)//-2
+		.setNeutralButton("回登入畫面", okClick)//-3
 		.show();
 	}
 	
 	private void logout() {
 		// TODO Auto-generated method stub
-		progressDialog = ProgressDialog.show(MainActivity.this, "登出中",
-				"請稍後");
-		progressDialog.setCancelable(true);
+		progressDialog = ProgressDialog.show(MainActivity.this, "登出中","請稍後",true,true);
 		if(haveInternet())
 		{
 			new Thread(new Runnable() {
@@ -519,21 +537,14 @@ public class MainActivity extends Activity {
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-					}finally{
-						Intent intent = new Intent(MainActivity.this,Login.class);
-						startActivity(intent);
-						finish();
 					}
 				}
 			}).start();
 		}
-		else {
+		else{
 			if (progressDialog.isShowing()) {
 				progressDialog.dismiss();
 			}
-			Intent intent = new Intent(MainActivity.this,Login.class);
-			startActivity(intent);
-			finish();
 		}
 
 	}

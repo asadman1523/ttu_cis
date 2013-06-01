@@ -30,8 +30,8 @@ public class LoginLogout {
 	public boolean login(String account,String password,Context context) throws ClientProtocolException, IOException
 	{
 		HttpParams httpParams = new BasicHttpParams();
-		HttpConnectionParams.setConnectionTimeout(httpParams, 10000); /// timeout is in millisecond
-		HttpConnectionParams.setSoTimeout(httpParams, 10000); 
+		HttpConnectionParams.setConnectionTimeout(httpParams, 5000); /// timeout is in millisecond
+		HttpConnectionParams.setSoTimeout(httpParams, 5000); 
 		httpClient = new DefaultHttpClient(httpParams);
 		String url2 = "http://stucis.ttu.edu.tw";
 		String url3 = "http://stucis.ttu.edu.tw/login.php";
