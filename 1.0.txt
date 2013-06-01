@@ -1,5 +1,8 @@
+1.0.1.1
+bug fix
+
 1.0.1.0
-bug fixs
+bug fix
 
 1.0.0.9
 設定登出登入timeout

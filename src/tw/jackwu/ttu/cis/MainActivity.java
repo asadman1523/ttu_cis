@@ -8,11 +8,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.security.auth.PrivateCredentialPermission;
+
 import loginpage.Login;
 import loginpage.LoginLogout;
 
 import org.apache.http.client.ClientProtocolException;
 
+import android.R.integer;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -23,6 +26,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.StaticLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,6 +38,7 @@ import android.widget.ExpandableListView.OnChildClickListener;
 
 public class MainActivity extends Activity {
 	ProgressDialog progressDialog;
+	boolean ready = false; //用在line:519登出時
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -482,7 +487,6 @@ public class MainActivity extends Activity {
 				switch (which) {
 				case -1:
 					logout();
-					
 					finish();
 				break;
 				case -2:
@@ -513,15 +517,17 @@ public class MainActivity extends Activity {
 		.show();
 	}
 	
-	private void logout() {
+	private boolean logout() {
 		// TODO Auto-generated method stub
 		progressDialog = ProgressDialog.show(MainActivity.this, "登出中","請稍後",true,true);
+		
 		if(haveInternet())
 		{
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
 					// TODO Auto-generated method stub
+					
 					LoginLogout loginLogout = new LoginLogout();
 					try {
 						if(loginLogout.logout())
@@ -538,14 +544,27 @@ public class MainActivity extends Activity {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+					ready=true;
 				}
 			}).start();
 		}
 		else{
 			if (progressDialog.isShowing()) {
 				progressDialog.dismiss();
+				
+			}
+			ready=true;
+		}
+		while(!ready)
+		{
+			Log.v("aa", "等待中...");
+			try {
+				Thread.sleep(300);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
-
+		return ready;
 	}
 }

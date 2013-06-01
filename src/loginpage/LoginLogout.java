@@ -82,7 +82,6 @@ public class LoginLogout {
         String conString = EntityUtils.toString(response.getEntity(),"big5");
 		if(conString.indexOf("Logout operation")>0)
 		{
-			Log.v("aa", "µn¥X¦¨¥\");
 			return true;
 		}
 		else {

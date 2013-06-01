@@ -2,6 +2,7 @@ package loginpage;
 
 import java.io.IOException;
 
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 
@@ -47,8 +48,7 @@ public class Login extends Activity {
 						;
 					else {
 						progressDialog = ProgressDialog.show(Login.this, "登入中",
-								"請稍後...");
-						progressDialog.setCancelable(true);
+								"請稍後...",true,true);
 						Log.v("aa", "新緒");
 						thread = new Thread(backprocess);
 						thread.start();
@@ -138,15 +138,15 @@ public class Login extends Activity {
 	Runnable backprocess = new Runnable() {
 		@Override
 		public void run() {
-			// TODO Auto-generated method stub
+			Log.v("aa", "連線中");
+			LoginLogout loginLogout = new LoginLogout();
 			try {
-				Log.v("aa", "連線中");
-				LoginLogout loginLogout = new LoginLogout();
 				if (loginLogout.login(accountText.getText().toString(),
 						passwordtText.getText().toString(), Login.this)) {
 					// 判斷是否正在登入程序
 					if (progressDialog.isShowing()) {
 						progressDialog.dismiss();
+						
 						// 跳至儲存帳密
 						runOnUiThread(new Runnable() {
 							public void run() {
@@ -154,11 +154,11 @@ public class Login extends Activity {
 								warningMessage.setText("");
 							}
 						});
-
+						finish();
 						Intent intent = new Intent(Login.this,
 								MainActivity.class);
 						startActivity(intent);
-						finish();
+						
 					} else {
 						Log.v("aa", "登入取消");
 					}
@@ -174,20 +174,12 @@ public class Login extends Activity {
 						}
 					});
 				}
-			} catch (final IOException e) {
+			} catch (ClientProtocolException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				Log.v("aa", e.toString());
-				runOnUiThread(new Runnable() {
-					public void run() {
-						warningMessage.setText(e.toString() + "\n"
-								+ "請檢查網路連線並重試一次");
-						if (progressDialog.isShowing()) {
-							progressDialog.dismiss();
-						}
-					}
-				});
-
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 
 		}
