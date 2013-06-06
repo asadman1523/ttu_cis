@@ -14,6 +14,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -42,26 +43,10 @@ public class Login extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				if (haveInternet()) {
-					if (accountText.getText().equals("")
-							|| passwordtText.getText().equals(""))
-						;
-					else {
-						progressDialog = ProgressDialog.show(Login.this, "登入中",
-								"請稍後...",true,true);
-						Log.v("aa", "新緒");
-						thread = new Thread(backprocess);
-						thread.start();
-					}
-				} else {
-					runOnUiThread(new Runnable() {
-						public void run() {
-							warningMessage.setText("沒有網路連線");
-						}
-					});
-				}
+				new LoginTask().execute();
 			}
 		});
+		
 
 		// 儲存帳密
 		storeInformation
@@ -135,56 +120,6 @@ public class Login extends Activity {
 		}
 	}
 
-	Runnable backprocess = new Runnable() {
-		@Override
-		public void run() {
-			Log.v("aa", "連線中");
-			LoginLogout loginLogout = new LoginLogout();
-			try {
-				if (loginLogout.login(accountText.getText().toString(),
-						passwordtText.getText().toString(), Login.this)) {
-					// 判斷是否正在登入程序
-					if (progressDialog.isShowing()) {
-						progressDialog.dismiss();
-						
-						// 跳至儲存帳密
-						runOnUiThread(new Runnable() {
-							public void run() {
-								store(storeInformation.isChecked());
-								warningMessage.setText("");
-							}
-						});
-						finish();
-						Intent intent = new Intent(Login.this,
-								MainActivity.class);
-						startActivity(intent);
-						
-					} else {
-						Log.v("aa", "登入取消");
-					}
-				}
-				// 登入不成功
-				else {
-					if (progressDialog.isShowing()) {
-						progressDialog.dismiss();
-					}
-					runOnUiThread(new Runnable() {
-						public void run() {
-							warningMessage.setText("帳號或密碼錯囉!");
-						}
-					});
-				}
-			} catch (ClientProtocolException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-		}
-	};
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -216,5 +151,59 @@ public class Login extends Activity {
 	public void openOptionDialog() {
 		new AlertDialog.Builder(Login.this).setTitle(R.string.about_title)
 				.setMessage(R.string.about_content).show();
+	}
+	
+	class LoginTask extends AsyncTask<Void, Void, String> {
+
+		@Override
+		protected void onPreExecute() {
+			// TODO Auto-generated method stub
+			super.onPreExecute();
+			progressDialog = ProgressDialog.show(Login.this, "登入中","請稍後...",true,true);
+					
+		}
+		@Override
+		protected String doInBackground(Void... params) {
+			// TODO Auto-generated method stub
+			if(haveInternet())
+			{
+				LoginLogout loginLogout = new LoginLogout();
+				try {
+					loginLogout.login(accountText.getText().toString()
+							, passwordtText.getText().toString(), Login.this);
+				} catch (ClientProtocolException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					return e.toString();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					return e.toString();
+				}
+				return "LOGIN SUCCESS";
+			}else {
+				return "NO INTERNET";
+			}
+		}
+		@Override
+		protected void onPostExecute(String result) {
+			// TODO Auto-generated method stub
+			super.onPostExecute(result);
+			progressDialog.dismiss();
+			if(result.equals("LOGIN SUCCESS"))
+			{
+				finish();
+				store(storeInformation.isChecked());
+				Intent intent = new Intent(Login.this,MainActivity.class);
+				startActivity(intent);
+			}
+			else if(result.equals("NO INTERNET")){
+				warningMessage.setText("請檢查網路連線");
+			}else {
+				warningMessage.setText(result);
+			}
+
+		}
+		
 	}
 }

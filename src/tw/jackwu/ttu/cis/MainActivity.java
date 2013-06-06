@@ -24,8 +24,10 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.StaticLayout;
 import android.util.Log;
 import android.view.Menu;
@@ -38,7 +40,6 @@ import android.widget.ExpandableListView.OnChildClickListener;
 
 public class MainActivity extends Activity {
 	ProgressDialog progressDialog;
-	boolean ready = false; //用在line:519登出時
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -456,7 +457,7 @@ public class MainActivity extends Activity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if(resultCode==RESULT_OK)
 		{
-			Log.v("aa", "登出?");
+			Log.v("aa", "開啟詢問視窗");
 			logoutDialog();
 		}
 	};
@@ -483,28 +484,9 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				// TODO Auto-generated method stub
-				Log.v("aa", ""+which);
-				switch (which) {
-				case -1:
-					logout();
-					finish();
-				break;
-				case -2:
-					logout();
-					finish();
-					Intent intent = new Intent(Intent.ACTION_VIEW);
-					intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=tw.jackwu.ttu.cis"));
-					startActivity(intent);
-					
-				break;
-				case -3:
-					logout();
-					finish();
-					intent = new Intent(MainActivity.this,Login.class);
-					startActivity(intent);
-					
-					break;
-				}
+				Log.v("aa", which+"");
+				new LogoutTask().execute(which);
+				
 			}
 		};
 		
@@ -517,54 +499,57 @@ public class MainActivity extends Activity {
 		.show();
 	}
 	
-	private boolean logout() {
-		// TODO Auto-generated method stub
-		progressDialog = ProgressDialog.show(MainActivity.this, "登出中","請稍後",true,true);
-		
-		if(haveInternet())
-		{
-			new Thread(new Runnable() {
-				@Override
-				public void run() {
-					// TODO Auto-generated method stub
-					
-					LoginLogout loginLogout = new LoginLogout();
-					try {
-						if(loginLogout.logout())
-						{
-							Log.v("aa", "Logout Success.");
-							if (progressDialog.isShowing()) {
-								progressDialog.dismiss();
-							}
-						}
-					} catch (ClientProtocolException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					ready=true;
+
+	class LogoutTask extends AsyncTask<Integer, Void, Integer> {
+		@Override
+		protected void onPreExecute() {
+			// TODO Auto-generated method stub
+			super.onPreExecute();
+			progressDialog = ProgressDialog.show(MainActivity.this, "登出中","請稍後",true,true);
+		}
+
+		@Override
+		protected Integer doInBackground(Integer... params) {
+			// TODO Auto-generated method stub
+			if(haveInternet())
+			{
+				LoginLogout loginLogout = new LoginLogout();
+				try {
+					loginLogout.logout();
+				} catch (ClientProtocolException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-			}).start();
-		}
-		else{
-			if (progressDialog.isShowing()) {
-				progressDialog.dismiss();
-				
 			}
-			ready=true;
+			return params[0];
 		}
-		while(!ready)
-		{
-			Log.v("aa", "等待中...");
-			try {
-				Thread.sleep(300);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		
+		@Override
+		protected void onPostExecute(Integer result) {
+			// TODO Auto-generated method stub
+			super.onPostExecute(result);
+			progressDialog.dismiss();
+			Log.v("aa", ""+result);
+			finish();
+			switch (result) {
+			case -1:
+				//do nothing
+				break;
+			case -2:
+				Intent intent = new Intent(Intent.ACTION_VIEW);
+				intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=tw.jackwu.ttu.cis"));
+				startActivity(intent);
+				break;
+			default:
+				intent = new Intent(MainActivity.this,Login.class);
+				startActivity(intent);
+				break;
 			}
 		}
-		return ready;
+		
 	}
 }
+
