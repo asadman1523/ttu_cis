@@ -8,14 +8,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.security.auth.PrivateCredentialPermission;
-
 import loginpage.Login;
 import loginpage.LoginLogout;
 
 import org.apache.http.client.ClientProtocolException;
 
-import android.R.integer;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -27,8 +24,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.text.StaticLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -117,8 +112,8 @@ public class MainActivity extends Activity {
 		Map<String, String> child3Data4 = new HashMap<String, String>();
 		child3Data1.put("child", "電子信箱");
 		child3Data2.put("child", "網路大學");
-		child3Data3.put("child", "網路硬碟(一)");
-		child3Data4.put("child", "網路硬碟(二)");
+		child3Data3.put("child", "網路硬碟(一)(僅供下載)");
+		child3Data4.put("child", "網路硬碟(二)(僅供下載)");
 		
 		child3.add(child3Data1);
 		child3.add(child3Data2);

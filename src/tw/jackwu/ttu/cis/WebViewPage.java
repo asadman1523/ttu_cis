@@ -1,11 +1,14 @@
 package tw.jackwu.ttu.cis;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.webkit.CookieSyncManager;
+import android.webkit.DownloadListener;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -20,6 +23,17 @@ public class WebViewPage extends Activity {
 		String url = bundle.getString("url");
 		
 		WebView browser = (WebView)findViewById(R.id.webView1);
+		
+		browser.setDownloadListener(new DownloadListener() {
+	        public void onDownloadStart(String url, String userAgent,
+	                String contentDisposition, String mimetype,
+	                long contentLength) {
+	          Intent i = new Intent(Intent.ACTION_VIEW);
+	          i.setData(Uri.parse(url));
+	          startActivity(i);
+	        }
+	    });
+		
 		WebSettings webSettings = browser.getSettings();
 		webSettings.setSupportZoom(true);
 		webSettings.setBuiltInZoomControls(true);
