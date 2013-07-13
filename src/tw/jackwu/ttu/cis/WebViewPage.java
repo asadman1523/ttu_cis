@@ -1,5 +1,10 @@
 package tw.jackwu.ttu.cis;
 
+import loginpage.Login;
+import loginpage.LoginLogout;
+
+import org.apache.http.cookie.Cookie;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
@@ -7,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.DownloadListener;
 import android.webkit.WebSettings;
@@ -38,9 +44,19 @@ public class WebViewPage extends Activity {
 		webSettings.setSupportZoom(true);
 		webSettings.setBuiltInZoomControls(true);
 		webSettings.setJavaScriptEnabled(true);
-		
 		browser.setWebViewClient(new WebViewClient());
-		CookieSyncManager.getInstance().sync();
+		
+		Cookie sessionCookie = Login.cookie;
+		CookieSyncManager.createInstance(this);
+		CookieManager cookieManager = CookieManager.getInstance();
+		if (sessionCookie != null) {
+//			Log.v("aa", sessionCookie.getName());
+//			Log.v("aa", sessionCookie.getValue());
+		    //cookieManager.removeSessionCookie();
+		    String cookieString = sessionCookie.getName() + "=" + sessionCookie.getValue();
+		    cookieManager.setCookie(Login.cookie.getDomain(), cookieString);
+		    CookieSyncManager.getInstance().sync();
+		}   
 		browser.loadUrl(url);
 		
 		
