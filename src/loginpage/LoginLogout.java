@@ -39,7 +39,7 @@ public class LoginLogout {
 		postParameters.add(new BasicNameValuePair("Submit", "登入系統"));
 		httpPost.setEntity(new UrlEncodedFormEntity(postParameters,"big5"));
 		HttpResponse response = Login.httpClient.execute(httpPost,Login.httpContext);
-		Login.headers = response.getHeaders("referer");
+		Login.headers = response.getHeaders("referer");	//2013/08/08 新增
 		String data = EntityUtils.toString(response.getEntity(),"big5");
 		if (data.indexOf("系統登入") > 0) {
 			Log.v("aa", "登入失敗!");

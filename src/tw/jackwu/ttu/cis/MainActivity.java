@@ -42,7 +42,6 @@ public class MainActivity extends Activity {
 		//µn¥X
 		Button logout = (Button)findViewById(R.id.button1);
 		logout.setOnClickListener(new OnClickListener() {
-			
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub

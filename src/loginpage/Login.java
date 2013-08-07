@@ -7,6 +7,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
+import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CookieStore;
@@ -58,13 +59,14 @@ public class Login extends Activity {
 	public static DefaultHttpClient httpClient;
 	public static CookieStore cookieStore;
 	public static HttpContext httpContext;
-	public static Cookie cookie = null;
+	public static String cookie = "";
+	public static Header[] headers=null;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login);
 		findviews();
-		new Thread(downloadVertifyImage).start();
+//		new Thread(downloadVertifyImage).start();
 		submitButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -118,17 +120,17 @@ public class Login extends Activity {
 		HttpConnectionParams.setConnectionTimeout(httpParams, 10000); /// timeout is in millisecond
 		HttpConnectionParams.setSoTimeout(httpParams, 10000); 
 		httpClient = new DefaultHttpClient(httpParams);
-		cookieStore = new BasicCookieStore();
+		cookieStore = httpClient.getCookieStore();
 		httpContext = new BasicHttpContext();
 		httpContext.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
-		imageView.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				new Thread(downloadVertifyImage).start();
-			}
-		});
+//		imageView.setOnClickListener(new OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View arg0) {
+//				// TODO Auto-generated method stub
+//				new Thread(downloadVertifyImage).start();
+//			}
+//		});
 	}
 
 	private void get() {
@@ -243,10 +245,17 @@ public class Login extends Activity {
 				//After Login
 				List<Cookie> cookies = cookieStore.getCookies();
 				for (int i = 0; i < cookies.size(); i++) {
-				    cookie = cookies.get(i);
+				    
+					cookie+=cookies.get(i).getName()+"="+cookies.get(i).getValue()+";";
+					
+				    //if(cookies.get(i).getName().equals("PHPSESSID"));
+				   // {
+				    	//cookie=cookies.get(i);
+				   // }
 				}
-				Log.v("aa", cookie.getDomain());
-				Log.v("aa", cookie.getName());
+//				Log.v("aa", cookie.getDomain());
+//				Log.v("aa", cookie.getName());
+//				Log.v("aa", cookie.getValue());
 			
 				finish();
 				store(storeInformation.isChecked());
@@ -257,7 +266,7 @@ public class Login extends Activity {
 				warningMessage.setText("請檢查網路連線");
 			}else {
 				warningMessage.setText(result);
-				new Thread(downloadVertifyImage).start();
+				//new Thread(downloadVertifyImage).start();
 			}
 
 		}
