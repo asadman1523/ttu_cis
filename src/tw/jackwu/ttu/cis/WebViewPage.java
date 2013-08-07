@@ -1,10 +1,14 @@
 package tw.jackwu.ttu.cis;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import loginpage.Login;
 import loginpage.LoginLogout;
 
 import org.apache.http.cookie.Cookie;
 
+import android.R.integer;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
@@ -46,18 +50,25 @@ public class WebViewPage extends Activity {
 		webSettings.setJavaScriptEnabled(true);
 		browser.setWebViewClient(new WebViewClient());
 		
-		Cookie sessionCookie = Login.cookie;
+		//Cookie sessionCookie = Login.cookie;
 		CookieSyncManager.createInstance(this);
 		CookieManager cookieManager = CookieManager.getInstance();
-		if (sessionCookie != null) {
-//			Log.v("aa", sessionCookie.getName());
-//			Log.v("aa", sessionCookie.getValue());
-		    //cookieManager.removeSessionCookie();
-		    String cookieString = sessionCookie.getName() + "=" + sessionCookie.getValue();
-		    cookieManager.setCookie(Login.cookie.getDomain(), cookieString);
+//		if (sessionCookie != null) {
+
+//			Log.v("aa", sessionCookie.getName()+"a");
+//			Log.v("aa", sessionCookie.getValue()+"b");
+//			Log.v("aa", sessionCookie.getDomain()+"c");
+		    //String cookieString = sessionCookie.getName() + "=" + sessionCookie.getValue();
+		    cookieManager.setCookie("http://stucis.ttu.edu.tw/", Login.cookie);
+		    
 		    CookieSyncManager.getInstance().sync();
-		}   
-		browser.loadUrl(url);
+//		}   
+		Map<String, String> map = new HashMap<String, String>();
+		for(int i=0;i<Login.headers.length;i++) {
+			map.put(Login.headers[i].getName(), Login.headers[i].getValue());
+		}
+		
+		browser.loadUrl(url ,map);
 		
 		
 		Button logout = (Button)findViewById(R.id.button1);

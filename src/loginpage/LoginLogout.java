@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -12,9 +13,12 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.CoreProtocolPNames;
+import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 
 import android.content.Context;
+import android.text.StaticLayout;
 import android.util.Log;
 
 public class LoginLogout {
@@ -31,13 +35,12 @@ public class LoginLogout {
 		postParameters = new ArrayList<NameValuePair>();
 		postParameters.add(new BasicNameValuePair("ID", account));
 		postParameters.add(new BasicNameValuePair("PWD", password));
-		postParameters.add(new BasicNameValuePair("captcha_code", vertifyCode));
+		//postParameters.add(new BasicNameValuePair("captcha_code", vertifyCode));
 		postParameters.add(new BasicNameValuePair("Submit", "登入系統"));
 		httpPost.setEntity(new UrlEncodedFormEntity(postParameters,"big5"));
 		HttpResponse response = Login.httpClient.execute(httpPost,Login.httpContext);
-		
+		Login.headers = response.getHeaders("referer");
 		String data = EntityUtils.toString(response.getEntity(),"big5");
-		//Log.v("aa", data);
 		if (data.indexOf("系統登入") > 0) {
 			Log.v("aa", "登入失敗!");
 			return false;
