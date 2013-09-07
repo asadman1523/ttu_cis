@@ -52,32 +52,33 @@ public class LoginLogout {
 	}
 	
 	public boolean logout() throws ClientProtocolException, IOException {
-		String url = "http://stucis.ttu.edu.tw/logout.php";
-		String url2 = "http://stucis.ttu.edu.tw/logout2.php";
-		
-		Log.v("aa", "找驗證碼");
-		HttpGet httpGet = new HttpGet(url);
-		HttpResponse response = Login.httpClient.execute(httpGet);
-		String ConfirmCode = EntityUtils.toString(response.getEntity(),"big5");
-		ConfirmCode = ConfirmCode.substring(ConfirmCode.indexOf("value=")+7,ConfirmCode.indexOf("<p a")-3);
-
-		
-		//實作登出
-		HttpPost httpPost = new HttpPost(url2);
-		postParameters = new ArrayList<NameValuePair>();
-		postParameters.add(new BasicNameValuePair("ConfirmCode", ConfirmCode));
-		postParameters.add(new BasicNameValuePair("B1", "確定"));
-        httpPost.setEntity(new UrlEncodedFormEntity(postParameters,"big5"));
-        Log.v("aa", "登出");
-        response = Login.httpClient.execute(httpPost);
-        String conString = EntityUtils.toString(response.getEntity(),"big5");
-		if(conString.indexOf("Logout operation")>0)
-		{
-			return true;
-		}
-		else {
-			return false;
-		}
+//		String url = "http://stucis.ttu.edu.tw/logout.php";
+//		String url2 = "http://stucis.ttu.edu.tw/logout2.php";
+//		
+//		Log.v("aa", "找驗證碼");
+//		HttpGet httpGet = new HttpGet(url);
+//		HttpResponse response = Login.httpClient.execute(httpGet);
+//		String ConfirmCode = EntityUtils.toString(response.getEntity(),"big5");
+//		ConfirmCode = ConfirmCode.substring(ConfirmCode.indexOf("value=")+7,ConfirmCode.indexOf("<p a")-3);
+//
+//		
+//		//實作登出
+//		HttpPost httpPost = new HttpPost(url2);
+//		postParameters = new ArrayList<NameValuePair>();
+//		postParameters.add(new BasicNameValuePair("ConfirmCode", ConfirmCode));
+//		postParameters.add(new BasicNameValuePair("B1", "確定"));
+//        httpPost.setEntity(new UrlEncodedFormEntity(postParameters,"big5"));
+//        Log.v("aa", "登出");
+//        response = Login.httpClient.execute(httpPost);
+//        String conString = EntityUtils.toString(response.getEntity(),"big5");
+//		if(conString.indexOf("Logout operation")>0)
+//		{
+//			return true;
+//		}
+//		else {
+//			return false;
+//		}
+		return true;
 	}
 	
 	

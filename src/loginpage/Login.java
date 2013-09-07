@@ -60,7 +60,7 @@ public class Login extends Activity {
 	public static CookieStore cookieStore;
 	public static HttpContext httpContext;
 	public static String cookie = "";
-	public static Header[] headers=null;
+	public static Header[] headers;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -115,7 +115,6 @@ public class Login extends Activity {
 		warningMessage = (TextView) findViewById(R.id.warningmessage);
 		get();
 		
-		
 		HttpParams httpParams = new BasicHttpParams();
 		HttpConnectionParams.setConnectionTimeout(httpParams, 10000); /// timeout is in millisecond
 		HttpConnectionParams.setSoTimeout(httpParams, 10000); 
@@ -123,6 +122,8 @@ public class Login extends Activity {
 		cookieStore = httpClient.getCookieStore();
 		httpContext = new BasicHttpContext();
 		httpContext.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
+//		cookie="";
+//		headers=null;
 //		imageView.setOnClickListener(new OnClickListener() {
 //			
 //			@Override
@@ -247,11 +248,6 @@ public class Login extends Activity {
 				for (int i = 0; i < cookies.size(); i++) {
 				    
 					cookie+=cookies.get(i).getName()+"="+cookies.get(i).getValue()+";";
-					
-				    //if(cookies.get(i).getName().equals("PHPSESSID"));
-				   // {
-				    	//cookie=cookies.get(i);
-				   // }
 				}
 //				Log.v("aa", cookie.getDomain());
 //				Log.v("aa", cookie.getName());
