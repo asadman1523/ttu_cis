@@ -122,8 +122,8 @@ public class Login extends Activity {
 		cookieStore = httpClient.getCookieStore();
 		httpContext = new BasicHttpContext();
 		httpContext.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
-//		cookie="";
-//		headers=null;
+		cookie="";
+		headers=null;
 //		imageView.setOnClickListener(new OnClickListener() {
 //			
 //			@Override
