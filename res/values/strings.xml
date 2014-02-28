@@ -14,5 +14,27 @@
     <string name="about_title">關於</string>
     <string name="about_content">Code by JackWu\nblog:Jack玩樂誌 </string>
     <string name="logout">使用完畢按此登出</string>
+    <string name="webapp">按此使用大同手機版網頁</string>
 
+    <string name="url">http://securelogin.arubanetworks.com/cgi-bin/login</string>
+	<string name="username">USERNAME</string>
+	<string name="password">PASSWORD</string>
+	<string name="show_password">Show password</string>
+	<string name="login">Log In</string>
+	<string name="ssid">ttuweb</string>
+	<string name="err_ssid_msg">沒有連上ttuweb</string>
+	
+	
+	<string-array name="params_name">
+		<item>user</item>
+		<item>password</item>
+		<item>cmd</item>
+		<item>Login</item>
+	</string-array>
+	<string-array name="params_value">
+		<item></item>
+		<item></item>
+		<item>authenticate</item>
+		<item>Log In</item>
+	</string-array>
 </resources>

@@ -59,28 +59,16 @@ public class WebViewPage extends Activity {
 //			Log.v("aa", sessionCookie.getValue()+"b");
 //			Log.v("aa", sessionCookie.getDomain()+"c");
 		    //String cookieString = sessionCookie.getName() + "=" + sessionCookie.getValue();
-		    cookieManager.setCookie("http://stucis.ttu.edu.tw/", Login.cookie);
+		    cookieManager.setCookie("http://stucis.ttu.edu.tw/", Login.getCookie());
 		    
 		    CookieSyncManager.getInstance().sync();
 //		}   
 		Map<String, String> map = new HashMap<String, String>();
-		for(int i=0;i<Login.headers.length;i++) {
-			map.put(Login.headers[i].getName(), Login.headers[i].getValue());
+		for(int i=0;i<Login.getHeaders().length;i++) {
+			map.put(Login.getHeaders()[i].getName(), Login.getHeaders()[i].getValue());
 		}
 		
 		browser.loadUrl(url ,map);
-		
-		
-		Button logout = (Button)findViewById(R.id.button1);
-		logout.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				setResult(RESULT_OK);
-				finish();
-			}
-		});
 	}
 	@Override
 	public void onBackPressed() {

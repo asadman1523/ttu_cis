@@ -2,6 +2,7 @@ package tw.jackwu.ttu.cis;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,6 +32,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ExpandableListView.OnChildClickListener;
 
 public class MainActivity extends Activity {
@@ -39,15 +42,8 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		//µn¥X
-		Button logout = (Button)findViewById(R.id.button1);
-		logout.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				logoutDialog();
-			}
-		});
+
+
 		
 		ExpandableListView elv = (ExpandableListView)findViewById(R.id.expandableListView1);
 		elv.setGroupIndicator(null);
@@ -479,8 +475,22 @@ public class MainActivity extends Activity {
 			public void onClick(DialogInterface dialog, int which) {
 				// TODO Auto-generated method stub
 				Log.v("aa", which+"");
-				new LogoutTask().execute(which);
 				
+				switch (which) {
+				case -1:
+					//do nothing
+					break;
+				case -2:
+					Intent intent = new Intent(Intent.ACTION_VIEW);
+					intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=tw.jackwu.ttu.cis"));
+					startActivity(intent);
+					break;
+				default:
+					intent = new Intent(MainActivity.this,Login.class);
+					startActivity(intent);
+					break;
+				}
+				finish();
 			}
 		};
 		
